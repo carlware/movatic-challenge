@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize};
 
-#[derive(Deserialize, Debug,Clone)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct RentalUris {
     pub ios: String,
     pub android: String,
