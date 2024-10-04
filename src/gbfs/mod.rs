@@ -1,4 +1,4 @@
 pub mod models;
 pub mod client;
 
-pub use client::GFSClient;
+pub use client::GBFSClient;

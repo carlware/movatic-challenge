@@ -1,34 +1,28 @@
 use reqwest::Client;
+use reqwest;
 use reqwest::header::ACCEPT;
-use serde::de::DeserializeOwned;
-use crate::gbfs::models::station_information::{StationInformation, StationInformationData};
+use serde::de::{DeserializeOwned};
+use crate::gbfs::models::station_information::{StationInformationData};
 use crate::gbfs::models::station_status::{StationStatusData};
 
 const STATION_STATUS: &str = "station_status";
 const STATION_INFORMATION: &str = "station_information";
 
-pub struct GFSClient {
+pub struct GBFSClient {
     http_client: Client,
     base_url: String,
 }
 
-impl GFSClient {
+impl GBFSClient {
     pub fn new(
         base_url: String,
         timeout: std::time::Duration,
     ) -> Self {
         let http_client = Client::builder().timeout(timeout).build().unwrap();
-        GFSClient{
+        GBFSClient {
             http_client,
             base_url,
         }
-    }
-
-    pub fn search_by_id<'a>(
-        id: &String,
-        stations: &'a Vec<StationInformation>,
-    ) -> Option<&'a StationInformation> {
-        stations.iter().find(|x| x.station_id == *id)
     }
 
     pub async fn get_station_status(
@@ -48,25 +42,37 @@ impl GFSClient {
             .get(format!("{}/{}.json", self.base_url, endpoint))
             .header(ACCEPT, "application/json")
             .send()
-            .await?.
-            json::<T>()
+            .await?
+            .json::<T>()
             .await
-        // return Ok(response)
-        // return match self.http_client
-        //     .get(format!("{}/{}.json", self.base_url, endpoint))
-        //     .header(ACCEPT, "application/json")
-        //     .send()
-        //     .await?
-        //     .error_for_status() {
-        //     Ok(response) => {
-        //         // let res = response.json::<T>().await?;
-        //         println!("res {:?}", response.status());
-        //         Ok(response.json::<T>().await?)
-        //     },
-        //     Err(e) => {
-        //         println!("err {} message {}", endpoint, e);
-        //         Err(e)
-        //     }
-        // }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use serde::{Deserialize};
+    use serde::de::{DeserializeOwned};
+    use reqwest;
+    use serde_json;
+
+    // This `derive` requires the `serde` dependency.
+    #[derive(Deserialize, Debug)]
+    pub struct Ip {
+        origin: u64,
+    }
+
+    async fn get<T: DeserializeOwned>(endpoint: &str) -> reqwest::Result<T> {
+        reqwest::get("http://httpbin.org/ip")
+            .await?
+            .json::<T>()
+            .await
+    }
+
+    #[tokio::test]
+    async fn send_email_sends_the_expected_request() -> Result<(), reqwest::Error>{
+        let ip = get::<Ip>("http://httpbin.org/ip").await;
+
+        println!("ip: {:?}", ip);
+        Ok(())
     }
 }

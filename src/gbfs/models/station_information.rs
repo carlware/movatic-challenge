@@ -1,12 +1,12 @@
-use serde::{Deserialize};
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct RentalUris {
     pub ios: String,
     pub android: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct StationInformation {
     pub lon: f64,
     pub lat: f64,
@@ -18,12 +18,12 @@ pub struct StationInformation {
     pub station_id: String,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct StationsInformation {
     pub stations: Vec<StationInformation>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct StationInformationData {
     pub ttl: i64,
     pub data: StationsInformation,
