@@ -1,0 +1,5 @@
+target/
+ui/
+configuration.yaml
+README.md
+docker-compose.yml
