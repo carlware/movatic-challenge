@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  api:
+    container_name: rust-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_APPLICATION__HOST: "0.0.0.0"
+      APP_APPLICATION__PORT: "8000"
+      APP_GBFS__URL: "https://gbfs.bcycle.com/bcycle_madison/"
+
+  nginx-react:
+    container_name: ngix-react
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      args:
+        API_URL: "http://localhost:8000"
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
