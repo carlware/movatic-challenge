@@ -7,7 +7,7 @@ async fn main() -> Result<(), std::io::Error> {
     let configuration = get_configuration()
         .expect("Failed to read configuration.");
 
-    let gbfs_client = configuration.gbfs_client.client();
+    let gbfs_client = configuration.gbfs.client();
     let address = format!("{}:{}",
                           configuration.application.host,
                           configuration.application.port,
