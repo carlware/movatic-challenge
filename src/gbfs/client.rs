@@ -50,29 +50,62 @@ impl GBFSClient {
 
 #[cfg(test)]
 mod tests {
-    use serde::{Deserialize};
-    use serde::de::{DeserializeOwned};
-    use reqwest;
-    use serde_json;
+    use claims::{assert_err, assert_ok};
+    use wiremock::{Mock, MockServer, ResponseTemplate};
+    use wiremock::matchers::any;
+    use crate::gbfs::GBFSClient;
+    use crate::gbfs::models::station_status::{StationsStatus, StationStatusData};
 
-    // This `derive` requires the `serde` dependency.
-    #[derive(Deserialize, Debug)]
-    pub struct Ip {
-        origin: u64,
-    }
-
-    async fn get<T: DeserializeOwned>(endpoint: &str) -> reqwest::Result<T> {
-        reqwest::get("http://httpbin.org/ip")
-            .await?
-            .json::<T>()
-            .await
+    fn gbfs_client(base_url: String) -> GBFSClient {
+        GBFSClient::new(
+            base_url,
+            std::time::Duration::from_millis(200),
+        )
     }
 
     #[tokio::test]
-    async fn send_email_sends_the_expected_request() -> Result<(), reqwest::Error>{
-        let ip = get::<Ip>("http://httpbin.org/ip").await;
+    async fn get_stations_status_if_api_returns_200() {
+        let mock_server = MockServer::start().await;
+        let gbfs_client = gbfs_client(mock_server.uri());
 
-        println!("ip: {:?}", ip);
-        Ok(())
+        let body = StationStatusData{
+            ttl: 0,
+            last_updated: 0,
+            data: StationsStatus{
+                stations: vec![],
+            },
+            version: "".to_string(),
+        };
+
+        Mock::given(any())
+            .respond_with(ResponseTemplate::new(200).set_body_json(body))
+            .expect(1)
+            .mount(&mock_server)
+            .await;
+
+        let response = gbfs_client
+            .get_station_status()
+            .await;
+
+        assert_ok!(response);
+    }
+
+    #[tokio::test]
+    async fn get_error_if_api_returns_500() {
+        let mock_server = MockServer::start().await;
+        let gbfs_client = gbfs_client(mock_server.uri());
+
+
+        Mock::given(any())
+            .respond_with(ResponseTemplate::new(500).set_body_string("server error"))
+            .expect(1)
+            .mount(&mock_server)
+            .await;
+
+        let response = gbfs_client
+            .get_station_status()
+            .await;
+
+        assert_err!(response);
     }
 }
