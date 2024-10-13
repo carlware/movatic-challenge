@@ -7,7 +7,7 @@ function App() {
 	return (
 		<div className="App">
 			<Typography variant="h1" align="center" gutterBottom>
-				Movatic
+				Movatic ⚡︎🚲
 			</Typography>
 			<StationsView />
 		</div>

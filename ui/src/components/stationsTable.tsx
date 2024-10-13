@@ -46,6 +46,9 @@ export const StationsTable = ({ stations, handleOpen }: Props) => {
 							<TableCell align="right">
 								{station.num_bikes_available_types.classic}
 							</TableCell>
+							<TableCell align="right">
+								{station.num_bikes_available_types.smart}
+							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>

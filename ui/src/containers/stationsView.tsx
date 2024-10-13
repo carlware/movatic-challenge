@@ -18,13 +18,13 @@ export const StationsView = () => {
 		setStation(undefined);
 	};
 
-	const { data: stations, isSuccess, isError } = useQuery<StationStatus[]>(
-		"stations_status",
-		getStationsStatus,
-		{
-			staleTime: 1000,
-		},
-	);
+	const {
+		data: stations,
+		isSuccess,
+		isError,
+	} = useQuery<StationStatus[]>("stations_status", getStationsStatus, {
+		staleTime: 1000,
+	});
 
 	if (isSuccess) {
 		return (
