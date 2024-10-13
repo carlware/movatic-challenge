@@ -6,9 +6,6 @@ from across the world by reading MDS / GBFS feeds data.
 ## Requirements
 1. docker compose
 
-## Dev requirements
-1. [asdf](https://asdf-vm.com/guide/getting-started.html)
-
 
 ## Launch the project
 ```shell
@@ -21,6 +18,12 @@ docker compose up -d
 docker compose down
 ```
 
+## Dev requirements
+1. [rust > 1.78 ](https://www.rust-lang.org/tools/install)
+2. [asdf](https://asdf-vm.com/guide/getting-started.html)
+
+
+
 ## Development
 The folder structure is a cargo project, inside the ui folder there is a React application.
 
@@ -28,11 +31,11 @@ The folder structure is a cargo project, inside the ui folder there is a React a
 `Configuration.yaml` file is used to set the application settings
 
 ```shell
-# install rust with asdf
-asdf install
-
 # run the project
 cargo run
+
+# run test
+cargo test
 ```
 
 ### react
