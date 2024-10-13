@@ -15,6 +15,8 @@ from across the world by reading MDS / GBFS feeds data.
 # build and run the containers
 docker compose up -d
 
+# open the weapp at http://localhost:8080
+
 # destroy
 docker compose down
 ```
@@ -48,6 +50,9 @@ npm run lint
 
 ## TODO
 1. increase unit tests
-2. opaque the error responses from the API
-3. Add retry pattern for the GBFS api
-4. add a map instead of a list
+2. add unit tests for react
+3. use the status information instead of station id
+4. add a search box
+5. opaque the error responses from the API
+6. Add retry pattern for the GBFS api
+7. add a map instead of a list
