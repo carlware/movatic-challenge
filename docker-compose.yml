@@ -9,7 +9,7 @@ services:
       - "8000:8000"
     environment:
       APP_APPLICATION__HOST: "0.0.0.0"
-      APP_APPLICATION__PORT: "8000"
+      APP_APPLICATION__PORT: ${API_PORT:-8000}
       APP_GBFS__URL: "https://gbfs.bcycle.com/bcycle_madison/"
 
   nginx-react:
@@ -18,7 +18,8 @@ services:
       context: ./ui
       dockerfile: Dockerfile
       args:
-        API_URL: "http://localhost:8000"
+        API_URL: ${WEBAPP_API_URL:-http://localhost:8000}
+        MAPBOX_ACCESS_TOKEN: ${WEBAPP_MAPBOX_TOKEN:-pk.eyJ1Ijoic2FoaWx0aGFrYXJlNTIxIiwiYSI6ImNrbjVvMTkzNDA2MXQydnM2OHJ6aHJvbXEifQ.z5aEqRBTtDMWoxVzf3aGsg}
     ports:
       - "8080:8080"
     environment:
